@@ -1,0 +1,44 @@
+{
+  "sessions": [
+    {
+      "id": "1115512738:1115512738",
+      "data": {
+        "__scenes": {},
+        "step": "ASK_WORKS",
+        "fullName": "Dnxn"
+      }
+    },
+    {
+      "id": "8036055375:8036055375",
+      "data": {
+        "__scenes": {},
+        "step": "ASK_WORKS",
+        "fullName": "Abdizoirov Nurmuhammad"
+      }
+    },
+    {
+      "id": "290609615:290609615",
+      "data": {
+        "__scenes": {},
+        "step": "ASK_PASSPORT",
+        "fullName": "Nurmuhammad Abduzoir"
+      }
+    },
+    {
+      "id": "5905219761:5905219761",
+      "data": {
+        "__scenes": {},
+        "step": "ASK_PASSPORT",
+        "fullName": "Hdhxbbs"
+      }
+    },
+    {
+      "id": "7028512132:7028512132",
+      "data": {
+        "__scenes": {},
+        "step": "ASK_WORKS",
+        "fullName": "Yusupova Barchinoy"
+      }
+    }
+  ]
+}

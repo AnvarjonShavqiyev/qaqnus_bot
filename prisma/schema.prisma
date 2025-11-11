@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  telegramId     String   @unique
+  fullName       String?
+  passport       String?
+  role           Role     @default(USER)
+  createdAt      DateTime @default(now())
+  spectators     Spectators[]
+  works          Works[]
+}
+
+model Spectators {
+  id     Int   @id @default(autoincrement())
+  userId Int
+  user   User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Works {
+  id        Int     @id @default(autoincrement())
+  fileId    String?
+  text      String?
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status    Status  @default(PENDING)   
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Status {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
