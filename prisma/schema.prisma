@@ -20,7 +20,7 @@ model User {
 
 model Spectators {
   id     Int   @id @default(autoincrement())
-  userId Int
+  userId Int   
   user   User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

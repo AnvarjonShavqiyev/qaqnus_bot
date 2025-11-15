@@ -84,10 +84,17 @@ export class BotService {
     if (!user) return ctx.reply(MESSAGES.AUTH_NOTE);
 
     switch (data) {
-      case ACTIONS.SPECTATOR_RECORD:
+      case ACTIONS.SPECTATOR_RECORD:  
         const spectators = await this.prisma.spectators.findMany({
           select: { user: { select: { fullName: true, passport: true } } }
         });
+
+        const spectator = await this.prisma.spectators.findFirst({where: {userId: user.id}})
+
+        if (spectator) {
+          return ctx.reply(MESSAGES.USER_UNIQUE_NOTE);
+        }
+
         if (spectators.length >= MAX_SPECTATORS_COUNT) return ctx.reply(MESSAGES.NO_PLACE_NOTE);
 
         await this.prisma.spectators.create({ data: { userId: user.id } });
@@ -187,17 +194,17 @@ export class BotService {
 
   private async showCurrentGroup(ctx: MyContext) {
     if (this.currentIndex >= this.groups.length) {
-      this.currentIndex = 0;
+      this.currentIndex = ZERO;
       this.groups = [];
     }
 
     if (!this.groups.length || this.currentIndex >= this.groups.length) {
-      this.currentIndex = 0;
-      return ctx.reply("✅ Barcha foydalanuvchilar tekshirildi.");
+      this.currentIndex = ZERO;
+      return ctx.reply(MESSAGES.CHECKED_ALL);
     }
 
     const group = this.groups[this.currentIndex];
-    const user = group[0].user;
+    const user = group[ZERO].user;
     const chatId = ctx.chat?.id ?? ctx.from?.id;
     if (!chatId) return;
 

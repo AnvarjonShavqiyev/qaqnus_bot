@@ -44,6 +44,7 @@ export const MESSAGES = {
     DONE: "Eslatmalar jo'natildi.",
     NEW_ANNOUNCE_NOTE: "Yangi son e'lon qilindi.",
     USER_ACCEPT_NOTE: "Tabriklaymiz, ushbu dasturimizda ijrochi sifatida tashrif buyurishingiz mumkin.",
-    USER_REJECT_NOTE: "Kechirasiz, koʻrsatuvning ayrim shartlariga mos kelmagani uchun bu dasturimizda siz ijrochi sifatida qatnasha olmaysiz, shunga qaramay, dasturimizga tashrif buyurishingiz va “Qaqnus” dasturining yozib olish jarayoniga guvoh boʻlishingiz mumkin."
-
+    USER_REJECT_NOTE: "Kechirasiz, koʻrsatuvning ayrim shartlariga mos kelmagani uchun bu dasturimizda siz ijrochi sifatida qatnasha olmaysiz, shunga qaramay, dasturimizga tashrif buyurishingiz va “Qaqnus” dasturining yozib olish jarayoniga guvoh boʻlishingiz mumkin.",
+    USER_UNIQUE_NOTE: "Siz allaqachon tomoshabin sifatida ro'yxatdan o'tgansiz.",
+    CHECKED_ALL: "✅ Barcha foydalanuvchilar tekshirildi."
 }
