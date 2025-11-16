@@ -66,6 +66,7 @@ export class BotService {
             contact: text,
           },
         });
+        return this.sendMainMenu(ctx);
 
       case ACTIONS.ASK_WORKS:
         const userWorks = await this.prisma.works.findMany({
