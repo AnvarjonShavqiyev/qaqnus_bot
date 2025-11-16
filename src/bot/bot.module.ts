@@ -4,15 +4,14 @@ import { BotUpdate } from './bot.update';
 import { BotService } from './bot.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { sessionMiddleware } from './middlewares/session.middleware';
-import { NotificationModule } from 'src/notifications/notification.module';
+import { EMPTY_STRING } from 'src/constants';
 
 @Module({
   imports: [
     TelegrafModule.forRoot({
-      token: process.env.BOT_TOKEN || '',
+      token: process.env.BOT_TOKEN || EMPTY_STRING,
       middlewares: [sessionMiddleware],
     }),
-    NotificationModule
   ],
   providers: [BotUpdate, BotService, PrismaService],
 })

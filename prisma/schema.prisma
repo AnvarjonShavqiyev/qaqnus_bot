@@ -12,6 +12,7 @@ model User {
   telegramId     String   @unique
   fullName       String?
   passport       String?
+  contact        String?
   role           Role     @default(USER)
   createdAt      DateTime @default(now())
   spectators     Spectators[]

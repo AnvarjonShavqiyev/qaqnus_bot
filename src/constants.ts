@@ -21,6 +21,7 @@ export const userCommands = [
 export const MESSAGES = {
     ASK_NAME: '1️⃣ Iltimos, Ism familiyangizni kiriting (hujjatdagi bilan bir xil boʻlishi kerak)',
     ASK_PASSPORT: '2️⃣ Rahmat, endi pasportingiz seriya va raqamini kiriting.',
+    ASK_CONTACT: "Rahmat, endi zarur xollarda siz bilan bog'lana olishimiz uchun telegram @username yoki telefon raqamingizni kiriting.",
     CHOOSE_COMMAND: 'Iltimos, buyruqlardan birini tanlang:',
     COMPLETE_WORKS: 'Soʻrovingiz qabul qilindi, tez orada moderatorlarimiz siz bilan bogʻlanadi.',
     SAVE_NOTE: 'Ijodiy ishingiz saqlanmoqda, iltimos kuting.',
@@ -46,5 +47,6 @@ export const MESSAGES = {
     USER_ACCEPT_NOTE: "Tabriklaymiz, ushbu dasturimizda ijrochi sifatida tashrif buyurishingiz mumkin.",
     USER_REJECT_NOTE: "Kechirasiz, koʻrsatuvning ayrim shartlariga mos kelmagani uchun bu dasturimizda siz ijrochi sifatida qatnasha olmaysiz, shunga qaramay, keyingi ko'rsatuvimizda ishtirok etish uchun qaytadan urinib ko'rishingiz mumkin.",
     USER_UNIQUE_NOTE: "Siz allaqachon tomoshabin sifatida ro'yxatdan o'tgansiz.",
-    CHECKED_ALL: "✅ Barcha foydalanuvchilar tekshirildi."
+    CHECKED_ALL: "✅ Barcha foydalanuvchilar tekshirildi.",
+    USER_COMPLETNESS_WORK: "Sizning ijodiy ishlaringizni tekshirish yakunlangan, iltimos, keyingi sonlarda yana urinib ko'ring."
 }
