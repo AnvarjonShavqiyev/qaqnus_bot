@@ -80,7 +80,7 @@ export class BotService {
           },
         });
 
-        if (userWorks) {
+        if (userWorks.length) {
           return ctx.reply(MESSAGES.USER_COMPLETNESS_WORK);
         }
 
