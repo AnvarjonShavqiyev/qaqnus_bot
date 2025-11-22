@@ -4,7 +4,7 @@
       "id": "1115512738:1115512738",
       "data": {
         "__scenes": {},
-        "step": "ASK_CONTACT",
+        "step": "ASK_WORKS",
         "fullName": "Anvarjon Shavqiyev",
         "passport": "Seriya"
       }
@@ -64,6 +64,18 @@
       "data": {
         "__scenes": {},
         "step": "ASK_NAME"
+      }
+    },
+    {
+      "id": "1667789819:1667789819",
+      "data": {
+        "__scenes": {}
+      }
+    },
+    {
+      "id": "1647986700:1647986700",
+      "data": {
+        "__scenes": {}
       }
     }
   ]
