@@ -7,7 +7,6 @@ export const EMPTY_STRING = "";
 
 export const adminCommands = [
     [{ text: "Yangi Qaqnus sonini e'lon qilish", callback_data: ACTIONS.ANNOUNCEMENT }],
-    [{ text: "Ishtirokchilarni saralash", callback_data: ACTIONS.SORTING }],
     [{ text: "Tomoshabinlar ro'yxatini olish", callback_data: ACTIONS.LIST_VIEWERS }],
     [{ text: "Ijrochilar ro'yxatini olish", callback_data: ACTIONS.LIST_ATTENDEES }],
     [{ text: "Eslatma yuborish", callback_data: ACTIONS.SEND_NOTIFICATION }],
@@ -48,5 +47,7 @@ export const MESSAGES = {
     USER_REJECT_NOTE: "Kechirasiz, koʻrsatuvning ayrim shartlariga mos kelmagani uchun bu dasturimizda siz ijrochi sifatida qatnasha olmaysiz, shunga qaramay, keyingi ko'rsatuvimizda ishtirok etish uchun qaytadan urinib ko'rishingiz mumkin.",
     USER_UNIQUE_NOTE: "Siz allaqachon tomoshabin sifatida ro'yxatdan o'tgansiz.",
     CHECKED_ALL: "✅ Barcha foydalanuvchilar tekshirildi.",
-    USER_COMPLETNESS_WORK: "Sizning ijodiy ishlaringizni tekshirish yakunlangan, iltimos, keyingi sonlarda yana urinib ko'ring."
+    USER_COMPLETNESS_WORK: "Sizning ijodiy ishlaringizni tekshirish yakunlangan, iltimos, keyingi sonlarda yana urinib ko'ring.",
+    ATTENDENSE_NOTE: "Iltimos, ishtirok etish uchun, ijodiy ishlaringizni quyidagi guruhga yoʻllang: \n\nhttps://t.me/qaqnus_kasting\n\nAgar ijodiy ishingiz badiiy kengashdan oʻtgan taqdirda, moderatorlarimiz siz bilan bogʻlanadi.\n\nQaqnusning ayni soniga mos kelmaydigan mavzudagi ijodiy ishlar rad etiladi.",
+    NO_PERFORMERS: "Ijrochilar yo'q"
 }

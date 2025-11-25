@@ -69,28 +69,7 @@ export class BotService {
         return this.sendMainMenu(ctx);
 
       case ACTIONS.ASK_WORKS:
-        const userWorks = await this.prisma.works.findMany({
-          where: {
-            AND: [
-              { userId: user?.id },
-              {
-                OR: [{ status: 'ACCEPTED' }, { status: 'REJECTED' }],
-              },
-            ],
-          },
-        });
-        
-        if (userWorks.length) {
-          return ctx.reply(MESSAGES.USER_COMPLETNESS_WORK);
-        }
-
-        const { fileId, textWork } = extractFileId(ctx.message) as any;
-        ctx.reply(MESSAGES.SAVE_NOTE);
-        await this.prisma.works.create({
-          data: { userId: user!.id, fileId, text: textWork },
-        });
-
-        return ctx.reply(MESSAGES.SAVED_NOTE);
+        ctx.reply(MESSAGES.ATTENDENSE_NOTE)
     }
 
     if ((ctx.session.step as ACTIONS) !== ACTIONS.ASK_WORKS) {
@@ -137,14 +116,18 @@ export class BotService {
         return ctx.reply(MESSAGES.SPECTATOR_ANSWER);
 
       case ACTIONS.ATTENDEE_RECORD:
-        ctx.session.step = ACTIONS.ASK_WORKS;
-        return ctx.reply(MESSAGES.ASK_WORKS);
+        await this.prisma.performers.create({
+          data: {
+            userId: user.id
+          }
+        })
+        return ctx.reply(MESSAGES.ATTENDENSE_NOTE);
     }
 
     if (user.role === ROLES.ADMIN) {
       switch (data) {
         case ACTIONS.ANNOUNCEMENT:
-          await this.prisma.works.deleteMany();
+          await this.prisma.performers.deleteMany();
           await this.prisma.spectators.deleteMany();
 
           const users = await this.prisma.user.findMany({
@@ -173,27 +156,26 @@ export class BotService {
             : MESSAGES.NO_SPECTATORS;
           return ctx.reply(list);
 
-        case ACTIONS.SORTING:
-          return this.startSorting(ctx);
-
         case ACTIONS.LIST_ATTENDEES:
-          const attendees = await this.getAcceptedUsers();
-          const message = Object.values(attendees)
+          const attendees = await this.prisma.performers.findMany({include: {user: true}});
+          const message = attendees
             .map((g, i) => {
               return `${i + 1}👤 ${g.user.fullName} - ${g.user.passport} - ${g.user.contact}\n`;
             })
             .join('\n\n');
 
-          return ctx.reply(message);
+          return ctx.reply(message.length ? message : MESSAGES.NO_PERFORMERS);
 
         case ACTIONS.SEND_NOTIFICATION:
-          const attendees_list = await this.getAcceptedUsers();
           const spectators_list = await this.prisma.spectators.findMany({
+            include: { user: true },
+          });
+          const performers = await this.prisma.performers.findMany({
             include: { user: true },
           });
 
           await Promise.all(
-            [...spectators_list].map((u) =>
+            [...spectators_list, ...performers].map((u) =>
               ctx.telegram.sendMessage(
                 u.user.telegramId,
                 MESSAGES.NOTIFICATION,
@@ -201,126 +183,9 @@ export class BotService {
             ),
           );
 
-          await Promise.all(
-            Object.values(attendees_list).map((user) => {
-              ctx.telegram.sendMessage(
-                user.user.telegramId,
-                MESSAGES.NOTIFICATION,
-              );
-            }),
-          );
-
           ctx.reply(MESSAGES.DONE);
       }
-
-      if (data === DECISIONS.ACCEPTED || data === DECISIONS.REJECTED) {
-        return this.handleSortingDecision(ctx, data);
-      }
     }
-  }
-
-  private async startSorting(ctx: MyContext) {
-    const pendingWorks = await this.prisma.works.findMany({
-      where: { status: 'PENDING' },
-      include: { user: true },
-    });
-
-    if (pendingWorks.length === ZERO) {
-      this.currentIndex = ZERO;
-      this.groups = [];
-      return ctx.reply(MESSAGES.SORTING_COMPLETED);
-    }
-
-    const grouped = pendingWorks.reduce(
-      (acc, w) => {
-        if (!acc[w.userId]) acc[w.userId] = [];
-        acc[w.userId].push(w);
-        return acc;
-      },
-      {} as Record<number, typeof pendingWorks>,
-    );
-
-    this.groups = Object.values(grouped);
-    this.currentIndex = ZERO;
-
-    await this.showCurrentGroup(ctx);
-  }
-
-  private async showCurrentGroup(ctx: MyContext) {
-    if (this.currentIndex >= this.groups.length) {
-      this.currentIndex = ZERO;
-      this.groups = [];
-    }
-
-    if (!this.groups.length || this.currentIndex >= this.groups.length) {
-      this.currentIndex = ZERO;
-      return ctx.reply(MESSAGES.CHECKED_ALL);
-    }
-
-    const group = this.groups[this.currentIndex];
-    const user = group[ZERO].user;
-    const chatId = ctx.chat?.id ?? ctx.from?.id;
-    if (!chatId) return;
-
-    await ctx.reply(
-      `👤 User: ${user.fullName}\n📌 Ishlar soni: ${group.length}`,
-    );
-
-    for (const work of group) {
-      if (work.fileId) {
-        await ctx.telegram.sendDocument(chatId, work.fileId, {
-          caption: work.text ?? EMPTY_STRING,
-        });
-      } else if (work.text) {
-        await ctx.telegram.sendMessage(chatId, work.text);
-      }
-    }
-
-    await ctx.telegram.sendMessage(chatId, MESSAGES.ACCEPT_REJECT, {
-      reply_markup: {
-        inline_keyboard: [
-          [
-            { text: MESSAGES.ACCEPT, callback_data: DECISIONS.ACCEPTED },
-            { text: MESSAGES.REJECT, callback_data: DECISIONS.REJECTED },
-          ],
-        ],
-      },
-    });
-  }
-
-  private async handleSortingDecision(ctx: MyContext, action: string) {
-    const group = this.groups[this.currentIndex];
-    const userTelegramId = group[0].user.telegramId;
-
-    await this.prisma.works.updateMany({
-      where: { id: { in: group?.map((w) => w.id) } },
-      data: { status: action === 'ACCEPTED' ? 'ACCEPTED' : 'REJECTED' },
-    });
-
-    await ctx.reply(
-      action === DECISIONS.ACCEPTED
-        ? MESSAGES.ACCEPT_NOTE
-        : MESSAGES.REJECT_NOTE,
-    );
-
-    await ctx.telegram.sendMessage(
-      userTelegramId,
-      action === DECISIONS.ACCEPTED
-        ? MESSAGES.USER_ACCEPT_NOTE
-        : MESSAGES.USER_REJECT_NOTE,
-    );
-
-    this.currentIndex++;
-    return this.showCurrentGroup(ctx);
-  }
-
-  async completeRecivingWorks(ctx: MyContext) {
-    ctx.reply(MESSAGES.COMPLETE_WORKS);
-  }
-
-  async completeSorting(ctx: MyContext) {
-    ctx.reply(MESSAGES.COMPLETE_NOTE);
-    return this.sendAdminMenu(ctx);
   }
 
   private async sendAdminMenu(ctx: MyContext) {
@@ -329,24 +194,5 @@ export class BotService {
         inline_keyboard: adminCommands,
       },
     });
-  }
-
-  private async getAcceptedUsers() {
-    const acceptedWorks = await this.prisma.works.findMany({
-      where: { status: 'ACCEPTED' },
-      include: { user: true },
-    });
-
-    const groupedByUser = acceptedWorks.reduce(
-      (acc, work) => {
-        const userId = work.userId;
-        if (!acc[userId]) acc[userId] = { user: work.user, works: [] };
-        acc[userId].works.push(work);
-        return acc;
-      },
-      {} as Record<number, { user: any; works: typeof acceptedWorks }>,
-    );
-
-    return groupedByUser;
   }
 }

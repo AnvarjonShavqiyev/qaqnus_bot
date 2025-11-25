@@ -77,6 +77,46 @@
       "data": {
         "__scenes": {}
       }
+    },
+    {
+      "id": "7779920675:7779920675",
+      "data": {
+        "__scenes": {},
+        "step": "ASK_PASSPORT",
+        "fullName": "Qutpidinova Benazir Akmaljon qizi"
+      }
+    },
+    {
+      "id": "7023459837:7023459837",
+      "data": {
+        "__scenes": {},
+        "step": "ASK_NAME"
+      }
+    },
+    {
+      "id": "5403104121:5403104121",
+      "data": {
+        "__scenes": {}
+      }
+    },
+    {
+      "id": "6359692118:6359692118",
+      "data": {
+        "__scenes": {},
+        "step": "ASK_WORKS"
+      }
+    },
+    {
+      "id": "1006678892:1006678892",
+      "data": {
+        "__scenes": {}
+      }
+    },
+    {
+      "id": "6165106223:6165106223",
+      "data": {
+        "__scenes": {}
+      }
     }
   ]
 }
