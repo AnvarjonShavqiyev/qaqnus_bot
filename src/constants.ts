@@ -10,6 +10,7 @@ export const adminCommands = [
     [{ text: "Tomoshabinlar ro'yxatini olish", callback_data: ACTIONS.LIST_VIEWERS }],
     [{ text: "Ijrochilar ro'yxatini olish", callback_data: ACTIONS.LIST_ATTENDEES }],
     [{ text: "Eslatma yuborish", callback_data: ACTIONS.SEND_NOTIFICATION }],
+    [{ text: "Xabar yuborish", callback_data: ACTIONS.SEND_MESSAGE }],
 ];
 
 export const userCommands = [
@@ -49,5 +50,8 @@ export const MESSAGES = {
     CHECKED_ALL: "✅ Barcha foydalanuvchilar tekshirildi.",
     USER_COMPLETNESS_WORK: "Sizning ijodiy ishlaringizni tekshirish yakunlangan, iltimos, keyingi sonlarda yana urinib ko'ring.",
     ATTENDENSE_NOTE: "Iltimos, ishtirok etish uchun, ijodiy ishlaringizni quyidagi guruhga yoʻllang: \n\nhttps://t.me/qaqnus_kasting\n\nAgar ijodiy ishingiz badiiy kengashdan oʻtgan taqdirda, moderatorlarimiz siz bilan bogʻlanadi.\n\nQaqnusning ayni soniga mos kelmaydigan mavzudagi ijodiy ishlar rad etiladi.",
-    NO_PERFORMERS: "Ijrochilar yo'q"
+    NO_PERFORMERS: "Ijrochilar yo'q",
+    SEND_MESSAGE_NOTE: "Iltimos xabaringizni kiriting:",
+    SENT_MESSAGE: "Xabar, barcha foydalanuvchilarga yuborildi.",
+    SEND_MESSAGE_STARTED: "Xabar, barcha foydalanuvchilarga yuborilmoqda, iltimos kuting."
 }

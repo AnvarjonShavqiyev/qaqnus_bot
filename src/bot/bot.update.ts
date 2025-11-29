@@ -1,4 +1,4 @@
-import { Update, Start, On, Ctx, Command } from 'nestjs-telegraf';
+import { Update, Start, On, Ctx } from 'nestjs-telegraf';
 import { BotService } from './bot.service';
 import { MyContext } from './interfaces/bot-context.interface';
 
@@ -20,5 +20,4 @@ export class BotUpdate {
   async onCallbackQuery(@Ctx() ctx: MyContext) {
     this.botService.handleCallbackQuery(ctx);
   }
-
 }

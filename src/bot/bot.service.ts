@@ -1,27 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import {
   ACTIONS,
-  DECISIONS,
   ROLES,
   type MyContext,
 } from './interfaces/bot-context.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CallbackQuery } from 'telegraf/types';
-import { extractFileId } from './helpers';
 import {
   adminCommands,
-  EMPTY_STRING,
   MAX_SPECTATORS_COUNT,
   MESSAGES,
   userCommands,
-  ZERO,
 } from 'src/constants';
 
 @Injectable()
 export class BotService {
-  private currentIndex = ZERO;
-  private groups: any[] = [];
-
   constructor(private prisma: PrismaService) {}
 
   async handleStart(ctx: MyContext) {
@@ -69,7 +62,20 @@ export class BotService {
         return this.sendMainMenu(ctx);
 
       case ACTIONS.ASK_WORKS:
-        ctx.reply(MESSAGES.ATTENDENSE_NOTE)
+        ctx.reply(MESSAGES.ATTENDENSE_NOTE);
+      case ACTIONS.SEND_MESSAGE:
+        ctx.reply(MESSAGES.SEND_MESSAGE_STARTED)
+        const users = await this.prisma.user.findMany();
+        for (const u of users) {
+          try {
+            if (u.role !== ROLES.ADMIN) {
+              await ctx.telegram.sendMessage(u.telegramId, text);
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        return ctx.reply(MESSAGES.SENT_MESSAGE);
     }
 
     if ((ctx.session.step as ACTIONS) !== ACTIONS.ASK_WORKS) {
@@ -118,9 +124,9 @@ export class BotService {
       case ACTIONS.ATTENDEE_RECORD:
         await this.prisma.performers.create({
           data: {
-            userId: user.id
-          }
-        })
+            userId: user.id,
+          },
+        });
         return ctx.reply(MESSAGES.ATTENDENSE_NOTE);
     }
 
@@ -157,7 +163,9 @@ export class BotService {
           return ctx.reply(list);
 
         case ACTIONS.LIST_ATTENDEES:
-          const attendees = await this.prisma.performers.findMany({include: {user: true}});
+          const attendees = await this.prisma.performers.findMany({
+            include: { user: true },
+          });
           const message = attendees
             .map((g, i) => {
               return `${i + 1}👤 ${g.user.fullName} - ${g.user.passport} - ${g.user.contact}\n`;
@@ -184,6 +192,10 @@ export class BotService {
           );
 
           ctx.reply(MESSAGES.DONE);
+
+        case ACTIONS.SEND_MESSAGE:
+          ctx.session.step = ACTIONS.SEND_MESSAGE;
+          return ctx.reply(MESSAGES.SEND_MESSAGE_NOTE);
       }
     }
   }
