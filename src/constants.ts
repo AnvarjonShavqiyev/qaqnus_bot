@@ -61,3 +61,5 @@ export const MESSAGES = {
     DELETE_USER_SUCCESS: "Foydalanuvchi o'chirildi.",
     STOP_RECORDING_NOTE: "Uzr, roʻyxatlar yopildi, keyingi dasturlarimizda kutamiz. Qaqnus boʻyicha barcha yangiliklar: @qaqnus_klub kanalida"
 }
+
+export const CHUNK_SIZE = 50;

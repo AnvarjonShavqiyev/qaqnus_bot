@@ -8,10 +8,12 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CallbackQuery } from 'telegraf/types';
 import {
   adminCommands,
+  CHUNK_SIZE,
   MAX_SPECTATORS_COUNT,
   MESSAGES,
   userCommands,
 } from 'src/constants';
+import { chunkArray } from 'src/helpers';
 
 @Injectable()
 export class BotService {
@@ -36,7 +38,7 @@ export class BotService {
   async handleText(ctx: MyContext) {
     const text = (ctx.message as any).text;
     let user;
-    if(ctx.session.step === ACTIONS.DELETE_USER){
+    if (ctx.session.step === ACTIONS.DELETE_USER) {
       user = await this.prisma.user.findUnique({
         where: { id: +text },
       });
@@ -67,7 +69,7 @@ export class BotService {
       case ACTIONS.ASK_WORKS:
         ctx.reply(MESSAGES.ATTENDENSE_NOTE);
       case ACTIONS.SEND_MESSAGE:
-        ctx.reply(MESSAGES.SEND_MESSAGE_STARTED)
+        ctx.reply(MESSAGES.SEND_MESSAGE_STARTED);
         const users = await this.prisma.user.findMany();
         for (const u of users) {
           try {
@@ -80,10 +82,12 @@ export class BotService {
         }
         return ctx.reply(MESSAGES.SENT_MESSAGE);
       case ACTIONS.DELETE_USER:
-        ctx.telegram.sendMessage(user.telegramId, MESSAGES.DELETE_USER_NOTE)
-        await this.prisma.user.delete({where: {
-          id: +text,
-        }})
+        ctx.telegram.sendMessage(user.telegramId, MESSAGES.DELETE_USER_NOTE);
+        await this.prisma.user.delete({
+          where: {
+            id: +text,
+          },
+        });
         return ctx.reply(MESSAGES.DELETE_USER_SUCCESS);
     }
 
@@ -153,28 +157,45 @@ export class BotService {
 
         case ACTIONS.LIST_VIEWERS:
           const allSpectators = await this.prisma.spectators.findMany({
-            select: { user: { select: { fullName: true, passport: true, id: true } } },
+            select: {
+              user: { select: { fullName: true, passport: true, id: true } },
+            },
           });
-          const list = allSpectators.length
-            ? allSpectators
+          if (allSpectators.length) {
+            const chunks = chunkArray(allSpectators) as any;
+            for (let chunkIndex = 0; chunkIndex < chunks.length; chunkIndex++) {
+              const message = chunks[chunkIndex]
                 .map(
-                  (s, i) => `No:${i + 1}👤\n ID: ${s.user.id} | ${s.user.fullName} — ${s.user.passport}`,
+                  (s, i) =>
+                    `No:${chunkIndex * CHUNK_SIZE + i + 1}👤\n` +
+                    `ID: ${s.user.id} | ${s.user.fullName} — ${s.user.passport}`,
                 )
-                .join('\n')
-            : MESSAGES.NO_SPECTATORS;
-          return ctx.reply(list);
+                .join('\n\n');
+
+              ctx.reply(message);
+            }
+          }
+          break;
 
         case ACTIONS.LIST_ATTENDEES:
           const attendees = await this.prisma.performers.findMany({
             include: { user: true },
           });
-          const message = attendees
-            .map((g, i) => {
-              return `No:${i + 1}👤\n ID: ${g.userId} | ${g.user.fullName} - ${g.user.passport} - ${g.user.contact}\n`;
-            })
-            .join('\n\n');
+             if (attendees.length) {
+            const chunks = chunkArray(attendees) as any;
+            for (let chunkIndex = 0; chunkIndex < chunks.length; chunkIndex++) {
+              const message = chunks[chunkIndex]
+                .map(
+                  (s, i) =>
+                    `No:${chunkIndex * CHUNK_SIZE + i + 1}👤\n` +
+                    `ID: ${s.user.id} | ${s.user.fullName} — ${s.user.passport}`,
+                )
+                .join('\n\n');
 
-          return ctx.reply(message.length ? message : MESSAGES.NO_PERFORMERS);
+              ctx.reply(message);
+            }
+          }
+          break;
 
         case ACTIONS.SEND_NOTIFICATION:
           const spectators_list = await this.prisma.spectators.findMany({
@@ -198,23 +219,26 @@ export class BotService {
         case ACTIONS.SEND_MESSAGE:
           ctx.session.step = ACTIONS.SEND_MESSAGE;
           return ctx.reply(MESSAGES.SEND_MESSAGE_NOTE);
-        
+
         case ACTIONS.DELETE_USER:
           ctx.session.step = ACTIONS.DELETE_USER;
-          return ctx.reply(MESSAGES.DELETE_USER)
-        
+          return ctx.reply(MESSAGES.DELETE_USER);
+
         case ACTIONS.STOP_RECORDING:
           const all_users = await this.prisma.user.findMany();
-           for (const u of all_users) {
-          try {
-            if (u.role !== ROLES.ADMIN) {
-              await ctx.telegram.sendMessage(u.telegramId, MESSAGES.STOP_RECORDING_NOTE);
+          for (const u of all_users) {
+            try {
+              if (u.role !== ROLES.ADMIN) {
+                await ctx.telegram.sendMessage(
+                  u.telegramId,
+                  MESSAGES.STOP_RECORDING_NOTE,
+                );
+              }
+            } catch (error) {
+              console.log(error);
             }
-          } catch (error) {
-            console.log(error);
           }
-        }
-        ctx.reply(MESSAGES.SENT_MESSAGE)
+          ctx.reply(MESSAGES.SENT_MESSAGE);
       }
     }
   }
