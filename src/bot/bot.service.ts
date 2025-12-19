@@ -152,6 +152,16 @@ export class BotService {
         case ACTIONS.ANNOUNCEMENT:
           await this.prisma.performers.deleteMany();
           await this.prisma.spectators.deleteMany();
+          await this.prisma.settings.upsert({
+            where: { id: 1 },
+            update: {
+              isRegistrationEnabled: true,
+            },
+            create: {
+              id: 1,
+              isRegistrationEnabled: true,
+            },
+          });
 
           const users = await this.prisma.user.findMany({
             where: { role: ROLES.USER },
@@ -246,6 +256,7 @@ export class BotService {
               isRegistrationEnabled: false,
             },
           });
+          return ctx.reply("")
       }
     }
   }

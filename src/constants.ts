@@ -59,7 +59,8 @@ export const MESSAGES = {
     DELETE_USER_NOTE: "Kechirasiz, sizning ma’lumotlaringiz xato kiritilgani tufayli botdan hisobingiz oʻchirildi.Iltimos, botga qaytadan /start berib, qayta roʻyxatdan oʻting, hammasini toʻgʻri bajarayotganingizga ishonch hosil qiling.",
     DELETE_USER: "Foydalanuvchi ID sini kiriting:",
     DELETE_USER_SUCCESS: "Foydalanuvchi o'chirildi.",
-    STOP_RECORDING_NOTE: "Uzr, roʻyxatlar yopildi, keyingi dasturlarimizda kutamiz. Qaqnus boʻyicha barcha yangiliklar: @qaqnus_klub kanalida"
+    STOP_RECORDING_NOTE: "Uzr, roʻyxatlar yopildi, keyingi dasturlarimizda kutamiz. Qaqnus boʻyicha barcha yangiliklar: @qaqnus_klub kanalida",
+    RECORDING_STOPPED: "Ro'yxatga olish to'xtatildi."
 }
 
 export const CHUNK_SIZE = 50;
