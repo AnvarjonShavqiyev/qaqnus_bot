@@ -235,7 +235,7 @@ export class BotService {
             ),
           );
 
-          ctx.reply(MESSAGES.DONE);
+          return ctx.reply(MESSAGES.DONE);
 
         case ACTIONS.SEND_MESSAGE:
           ctx.session.step = ACTIONS.SEND_MESSAGE;
@@ -256,7 +256,7 @@ export class BotService {
               isRegistrationEnabled: false,
             },
           });
-          return ctx.reply("")
+          return ctx.reply(MESSAGES.RECORDING_STOPPED);
       }
     }
   }
