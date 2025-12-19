@@ -10,7 +10,7 @@ import { session } from 'telegraf';
   imports: [
     TelegrafModule.forRoot({
       token: process.env.BOT_TOKEN || EMPTY_STRING,
-      middlewares: [session()]
+      middlewares: [session()],
     }),
   ],
   providers: [BotUpdate, BotService, PrismaService],
