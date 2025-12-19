@@ -41,3 +41,8 @@ enum Status {
   ACCEPTED
   REJECTED
 }
+
+model Settings {
+  id                     Int      @id @default(autoincrement())
+  isRegistrationEnabled  Boolean  @default(false)
+}

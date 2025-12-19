@@ -1,7 +1,7 @@
 import { ACTIONS } from "./bot/interfaces/bot-context.interface";
 
 export const ZERO = 0;
-export const MAX_SPECTATORS_COUNT = 50;
+export const ONE = 1;
 
 export const EMPTY_STRING = "";
 

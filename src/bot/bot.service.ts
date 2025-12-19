@@ -9,8 +9,8 @@ import { CallbackQuery } from 'telegraf/types';
 import {
   adminCommands,
   CHUNK_SIZE,
-  MAX_SPECTATORS_COUNT,
   MESSAGES,
+  ONE,
   userCommands,
 } from 'src/constants';
 import { chunkArray } from 'src/helpers';
@@ -109,6 +109,9 @@ export class BotService {
     const callbackQuery = ctx.callbackQuery as CallbackQuery.DataQuery;
     const data = callbackQuery.data;
 
+    const isRegisterInabled = await this.prisma.settings.findUnique({
+      where: { id: ONE },
+    });
     const user = await this.prisma.user.findUnique({
       where: { telegramId: String(ctx.from!.id) },
     });
@@ -116,24 +119,32 @@ export class BotService {
 
     switch (data) {
       case ACTIONS.SPECTATOR_RECORD:
-        const spectator = await this.prisma.spectators.findFirst({
-          where: { userId: user.id },
-        });
+        if (isRegisterInabled) {
+          const spectator = await this.prisma.spectators.findFirst({
+            where: { userId: user.id },
+          });
 
-        if (spectator) {
-          return ctx.reply(MESSAGES.USER_UNIQUE_NOTE);
+          if (spectator) {
+            return ctx.reply(MESSAGES.USER_UNIQUE_NOTE);
+          }
+
+          await this.prisma.spectators.create({ data: { userId: user.id } });
+          return ctx.reply(MESSAGES.SPECTATOR_ANSWER);
+        } else {
+          return ctx.reply(MESSAGES.STOP_RECORDING_NOTE);
         }
 
-        await this.prisma.spectators.create({ data: { userId: user.id } });
-        return ctx.reply(MESSAGES.SPECTATOR_ANSWER);
-
       case ACTIONS.ATTENDEE_RECORD:
-        await this.prisma.performers.create({
-          data: {
-            userId: user.id,
-          },
-        });
-        return ctx.reply(MESSAGES.ATTENDENSE_NOTE);
+        if (isRegisterInabled) {
+          await this.prisma.performers.create({
+            data: {
+              userId: user.id,
+            },
+          });
+          return ctx.reply(MESSAGES.ATTENDENSE_NOTE);
+        } else {
+          return ctx.reply(MESSAGES.STOP_RECORDING_NOTE);
+        }
     }
 
     if (user.role === ROLES.ADMIN) {
@@ -181,7 +192,7 @@ export class BotService {
           const attendees = await this.prisma.performers.findMany({
             include: { user: true },
           });
-             if (attendees.length) {
+          if (attendees.length) {
             const chunks = chunkArray(attendees) as any;
             for (let chunkIndex = 0; chunkIndex < chunks.length; chunkIndex++) {
               const message = chunks[chunkIndex]
@@ -225,20 +236,16 @@ export class BotService {
           return ctx.reply(MESSAGES.DELETE_USER);
 
         case ACTIONS.STOP_RECORDING:
-          const all_users = await this.prisma.user.findMany();
-          for (const u of all_users) {
-            try {
-              if (u.role !== ROLES.ADMIN) {
-                await ctx.telegram.sendMessage(
-                  u.telegramId,
-                  MESSAGES.STOP_RECORDING_NOTE,
-                );
-              }
-            } catch (error) {
-              console.log(error);
-            }
-          }
-          ctx.reply(MESSAGES.SENT_MESSAGE);
+          await this.prisma.settings.upsert({
+            where: { id: 1 },
+            update: {
+              isRegistrationEnabled: false,
+            },
+            create: {
+              id: 1,
+              isRegistrationEnabled: false,
+            },
+          });
       }
     }
   }
