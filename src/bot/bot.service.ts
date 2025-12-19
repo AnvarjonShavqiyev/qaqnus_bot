@@ -109,9 +109,13 @@ export class BotService {
     const callbackQuery = ctx.callbackQuery as CallbackQuery.DataQuery;
     const data = callbackQuery.data;
 
-    const isRegisterInabled = await this.prisma.settings.findUnique({
+    const settings = await this.prisma.settings.findUnique({
       where: { id: ONE },
     });
+
+    const isRegistrationEnabled = settings
+      ? settings.isRegistrationEnabled
+      : false;
     const user = await this.prisma.user.findUnique({
       where: { telegramId: String(ctx.from!.id) },
     });
@@ -119,7 +123,7 @@ export class BotService {
 
     switch (data) {
       case ACTIONS.SPECTATOR_RECORD:
-        if (isRegisterInabled) {
+        if (isRegistrationEnabled) {
           const spectator = await this.prisma.spectators.findFirst({
             where: { userId: user.id },
           });
@@ -135,7 +139,7 @@ export class BotService {
         }
 
       case ACTIONS.ATTENDEE_RECORD:
-        if (isRegisterInabled) {
+        if (isRegistrationEnabled) {
           await this.prisma.performers.create({
             data: {
               userId: user.id,
