@@ -11,6 +11,9 @@ import { session } from 'telegraf';
     TelegrafModule.forRoot({
       token: process.env.BOT_TOKEN || EMPTY_STRING,
       middlewares: [session()],
+      launchOptions: {
+        dropPendingUpdates: true,
+      },
     }),
   ],
   providers: [BotUpdate, BotService, PrismaService],
