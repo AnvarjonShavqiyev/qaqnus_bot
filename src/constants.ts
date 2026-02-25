@@ -31,7 +31,7 @@ export const MESSAGES = {
     ASK_USER_ROLE: "Dasturning navbatdagi sonini yozib olish jarayonida kim sifatida ishtirok etmoqchisiz?",
     AUTH_NOTE: "Siz avval ro'yxatdan o'tishingiz kerak.",
     NO_PLACE_NOTE: "Kechirasiz, studioda oʻrindiqlar soni cheklangani tufayli sizni roʻyxatdan oʻtkaza olmadik. Keyingi dasturlarimizda kutamiz🙏",
-    SPECTATOR_ANSWER: "Tabriklaymiz, siz roʻyxatdan oʻtdingiz. Belgilangan vaqtda qaqnus dasturi yozib olinadigan manzilda sizni kutamiz. Iltimos, oʻzingiz bilan shaxsni tasdiqlovchi hujjatingizni olib kelishni unutmang.\nBatafsil: @qaqnus_klub",
+    SPECTATOR_ANSWER: "Tabriklaymiz, siz roʻyxatdan oʻtdingiz. Belgilangan vaqtda qaqnus dasturi yozib olinadigan manzilda sizni kutamiz. Iltimos, oʻzingiz bilan shaxsni tasdiqlovchi hujjatingizni olib kelishni unutmang.\nBatafsil: @nurmuhammadzoir",
     ASK_WORKS: "Ijodiy ishlaringizni yuboring. Tugatganingizda /saqlash buyrug'ini kiriting.",
     NEW_RECORDING_NOTE: "Qaqnus loyihasining yangi soni uchun ro'yxatga olish boshlandi, qatnashish istagingiz bo'lsa /start buyrug'ini kiriting.",
     ANNOUNCE_NOTE: "Qaqnus loyihasining yangi soni uchun ro'yxatga olish boshlandi, qatnashish istagingiz bo'lsa /start buyrug'ini kiriting.",
@@ -43,7 +43,7 @@ export const MESSAGES = {
     ACCEPT_NOTE: "✅ Ushbu foydalanuvchi ro'yxatga qo'shildi. Yetarlicha inson saralangan bo'lsa /tugatish buyrug'ini kiriting.",
     REJECT_NOTE: "❌ Ushbu foydalanuvchi rad etildi. Yetarlicha inson saralangan bo'lsa /tugatish buyrug'ini kiriting.",
     COMPLETE_NOTE: "Saralash yakunlandi.Barcha ma'lumotlar saqlandi.",
-    NOTIFICATION: "Qaqnus loyihasining yangi soni yozib olinishiga kam vaqt qoldi, iltimos o'z vaqtida tashrif buyuring.\nBatafsil: @qaqnus_klub",
+    NOTIFICATION: "Qaqnus loyihasining yangi soni yozib olinishiga kam vaqt qoldi, iltimos o'z vaqtida tashrif buyuring.\nBatafsil: @nurmuhammadzoir",
     DONE: "Eslatmalar jo'natildi.",
     NEW_ANNOUNCE_NOTE: "Yangi son e'lon qilindi.",
     USER_ACCEPT_NOTE: "Tabriklaymiz, ushbu dasturimizda ijrochi sifatida tashrif buyurishingiz mumkin.",
@@ -51,7 +51,7 @@ export const MESSAGES = {
     USER_UNIQUE_NOTE: "Siz allaqachon tomoshabin sifatida ro'yxatdan o'tgansiz.",
     CHECKED_ALL: "✅ Barcha foydalanuvchilar tekshirildi.",
     USER_COMPLETNESS_WORK: "Sizning ijodiy ishlaringizni tekshirish yakunlangan, iltimos, keyingi sonlarda yana urinib ko'ring.",
-    ATTENDENSE_NOTE: "Iltimos, ishtirok etish uchun, ijodiy ishlaringizni quyidagi guruhga yoʻllang: \n\nhttps://t.me/qaqnus_kasting\n\nAgar ijodiy ishingiz badiiy kengashdan oʻtgan taqdirda, moderatorlarimiz siz bilan bogʻlanadi.\n\nQaqnusning ayni soniga mos kelmaydigan mavzudagi ijodiy ishlar rad etiladi.\nBatafsil: @qaqnus_klub",
+    ATTENDENSE_NOTE: "Iltimos, ishtirok etish uchun, ijodiy ishlaringizni quyidagi guruhga yoʻllang: \n\n@qaqnuschilar\n\nAgar ijodiy ishingiz badiiy kengashdan oʻtgan taqdirda, moderatorlarimiz siz bilan bogʻlanadi.\n\nQaqnusning ayni soniga mos kelmaydigan mavzudagi ijodiy ishlar rad etiladi.\nBatafsil: @nurmuhammadzoir",
     NO_PERFORMERS: "Ijrochilar yo'q",
     SEND_MESSAGE_NOTE: "Iltimos xabaringizni kiriting:",
     SENT_MESSAGE: "Xabar, barcha foydalanuvchilarga yuborildi.",
@@ -59,7 +59,7 @@ export const MESSAGES = {
     DELETE_USER_NOTE: "Kechirasiz, sizning ma’lumotlaringiz xato kiritilgani tufayli botdan hisobingiz oʻchirildi.Iltimos, botga qaytadan /start berib, qayta roʻyxatdan oʻting, hammasini toʻgʻri bajarayotganingizga ishonch hosil qiling.",
     DELETE_USER: "Foydalanuvchi ID sini kiriting:",
     DELETE_USER_SUCCESS: "Foydalanuvchi o'chirildi.",
-    STOP_RECORDING_NOTE: "Uzr, roʻyxatlar yopildi, keyingi dasturlarimizda kutamiz. Qaqnus boʻyicha barcha yangiliklar: @qaqnus_klub kanalida",
+    STOP_RECORDING_NOTE: "Uzr, roʻyxatlar yopildi, keyingi dasturlarimizda kutamiz. Qaqnus boʻyicha barcha yangiliklar: @nurmuhammadzoir kanalida",
     RECORDING_STOPPED: "Ro'yxatga olish to'xtatildi."
 }
 
